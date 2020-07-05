@@ -18,4 +18,8 @@ export default {
      when_you_will_complete_this_or_have_no_idea:'When you will complete this, if you have no idea then leave this',
      set_date:'Set Date',
      set_new_goal:"Set New Goal",
+     heading_name_and_steps_are_required:'Wants to and steps are required',
+     done:'Done',
+     new_goal_added_successfully:'New Goal Added Successfully',
+     step:'Step',
 }

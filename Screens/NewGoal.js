@@ -1,17 +1,25 @@
 import React, {useState} from "react";
-import {View,StyleSheet,ScrollView,KeyboardAvoidingView} from "react-native";
+import {View, StyleSheet, ScrollView, KeyboardAvoidingView, Alert} from "react-native";
 import {HeadingText} from "../components/ui/HeadingText";
 import {AppText} from "../constants/text";
 import {CustomText} from "../components/ui/Text";
 import {Input,Button} from "react-native-elements";
 import NewGoalInputs from "../components/ui/NewGoalInputs";
 import colors from "../constants/colors";
+import {
+    SCLAlert,
+    SCLAlertButton
+} from 'react-native-scl-alert'
+import GoalModel from "../database/Models/GoalModel";
+import StepModel from "../database/Models/StepModel";
+import TaskModel from "../database/Models/TaskModel";
 
 
 
 export default props=>{
    const [wants_to,set_wants_to] = React.useState('');
    const [steps,setSteps] = useState([]);
+   const [done,setDone] = useState(false);
    const stepObject = {
        id:0,
        heading:'',
@@ -71,8 +79,42 @@ export default props=>{
        onChangeTaskValue(step,task,'date',selectedDate);
    }
 
-   const addNewGoal = ()=>{
-       console.log("add new goal",wants_to," steps = ",steps);
+   const addNewGoal = async ()=>{
+     if(steps.length > 0 && wants_to !== "") {
+
+        //   const newGoal = await GoalModel.setNewGoal(wants_to);
+        //
+        //  const promises =  steps.map(async step=> await StepModel.addSteps(step.heading,newGoal.id))
+        //  const allStepsInsertData = await Promise.all(promises);
+        //
+        //  const tasksArray = [];
+        // //
+        // allStepsInsertData.map(async (singleStepData,i)=>{
+        //      const tasks = steps[i].tasks;
+        //      return tasks.map(async (task,index)=>{
+        //          if(!task.set_end_time){
+        //              task.date = "";
+        //          }
+        //          task.step_id = singleStepData.insertId;
+        //          return tasksArray.push(task);
+        //
+        //      })
+        //
+        //
+        //  })
+        //
+        //  const res =  await TaskModel.addTasks(tasksArray)
+        //  // reset everything
+        //  console.log("res = ",res);
+         set_wants_to('');
+         setSteps([]);
+         setDone(true);
+       }else{
+          Alert.alert(AppText.error,AppText.heading_name_and_steps_are_required,[{text:AppText.ok}])
+      }
+
+
+
    }
 
 
@@ -80,6 +122,19 @@ export default props=>{
         <ScrollView>
 
                <View style={styles.container}>
+
+                   <SCLAlert
+                       theme="success"
+                       show={done}
+                       title={AppText.done}
+                       useNativeDrive={true}
+                       onRequestClose={()=>setDone(false)}
+                       subtitle={AppText.new_goal_added_successfully}
+                   >
+                       <SCLAlertButton theme="success" onPress={()=>setDone(false)}>{AppText.ok}</SCLAlertButton>
+                   </SCLAlert>
+
+
                    <HeadingText>{AppText.what_you_want_to_achieve}</HeadingText>
                    <CustomText style={styles.item}>{AppText.wants_to}</CustomText>
                    <Input onChangeText={(text)=>set_wants_to(text)} style={{marginVertical:20,}} placeholder={AppText.wants_to_eg}/>
@@ -115,6 +170,8 @@ export default props=>{
                        onPress={addNewGoal}
                        title={AppText.set_new_goal}
                    />
+
+
 
 
 
