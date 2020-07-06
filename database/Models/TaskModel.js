@@ -6,7 +6,7 @@ class TaskModel{
         return new Promise((resolve,reject)=>{
             db.transaction(tx=>{
 
-                let query = "INSERT INTO tasks(task_name,completed,end_time,step_id) VALUES";
+                let query = "INSERT INTO tasks(task_name,completed,end_time,step_id,goal_id) VALUES";
                 for(let i = 0; i<tasks.length;i++){
                     query = query + "('"
                         + tasks[i].task_name
@@ -16,6 +16,8 @@ class TaskModel{
                         + tasks[i].date
                         + "','"
                         + tasks[i].step_id
+                        + "','"
+                        + tasks[i].goal_id
                         + "')";
                     if (i != tasks.length - 1) {
                         query = query + ",";

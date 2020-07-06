@@ -22,4 +22,8 @@ export default {
      done:'Done',
      new_goal_added_successfully:'New Goal Added Successfully',
      step:'Step',
+     my_progress:'My Progress',
+     open:'Open',
+     tasks:'Tasks',
+     check_my_progress:'Check My Progress'
 }

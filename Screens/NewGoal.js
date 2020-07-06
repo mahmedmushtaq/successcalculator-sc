@@ -82,30 +82,29 @@ export default props=>{
    const addNewGoal = async ()=>{
      if(steps.length > 0 && wants_to !== "") {
 
-        //   const newGoal = await GoalModel.setNewGoal(wants_to);
+          const newGoal = await GoalModel.setNewGoal(wants_to);
+
+         const promises =  steps.map(async step=> await StepModel.addSteps(step.heading,newGoal.id))
+         const allStepsInsertData = await Promise.all(promises);
+
+         const tasksArray = [];
         //
-        //  const promises =  steps.map(async step=> await StepModel.addSteps(step.heading,newGoal.id))
-        //  const allStepsInsertData = await Promise.all(promises);
-        //
-        //  const tasksArray = [];
-        // //
-        // allStepsInsertData.map(async (singleStepData,i)=>{
-        //      const tasks = steps[i].tasks;
-        //      return tasks.map(async (task,index)=>{
-        //          if(!task.set_end_time){
-        //              task.date = "";
-        //          }
-        //          task.step_id = singleStepData.insertId;
-        //          return tasksArray.push(task);
-        //
-        //      })
-        //
-        //
-        //  })
-        //
-        //  const res =  await TaskModel.addTasks(tasksArray)
-        //  // reset everything
-        //  console.log("res = ",res);
+        allStepsInsertData.map(async (singleStepData,i)=>{
+             const tasks = steps[i].tasks;
+             return tasks.map(async (task,index)=>{
+                 if(!task.set_end_time){
+                     task.date = "";
+                 }
+                 task.step_id = singleStepData.insertId;
+                 task.goal_id = newGoal.insertId;
+                 return tasksArray.push(task);
+
+             })
+
+
+         })
+
+         const res =  await TaskModel.addTasks(tasksArray)
          set_wants_to('');
          setSteps([]);
          setDone(true);

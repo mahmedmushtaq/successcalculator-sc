@@ -18,7 +18,7 @@ const generateTable = (sqlQuery)=>new Promise((resolve,reject)=>{
 })
 
 export const goalTable = ()=>(
-    generateTable('CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY NOT NULL, wants_to VARCHAR(100) NOT NULL,  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);')
+    generateTable('CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY NOT NULL, wants_to VARCHAR(100) NOT NULL, completed BOOLEAN default FALSE,  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);')
 )
 
 
@@ -31,7 +31,7 @@ export const stepsTable = ()=>(
 
 
 export const tasksTable = ()=>(
-    generateTable('CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY NOT NULL, task_name VARCHAR(100), completed BOOLEAN, end_time DATETIME DEFAULT NULL,step_id INTEGER, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL);')
+    generateTable('CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY NOT NULL, task_name VARCHAR(100), completed BOOLEAN, end_time DATETIME DEFAULT NULL,step_id INTEGER, goal_id INTEGER, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL);')
 )
 
 export default db;

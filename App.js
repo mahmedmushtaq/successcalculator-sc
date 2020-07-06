@@ -62,7 +62,7 @@ export default function App() {
 
     const headerRight =(props)=>( {
         headerRight:()=>(
-            <FontAwesome name="plus" size={24}  color="white"  />
+            <FontAwesome name="plus" size={24}  color="white" onPress={()=>props.navigation.navigate(AppText.add_new_goal)}  />
         ),
         headerRightContainerStyle:{
             backgroundColor:colors.primary,

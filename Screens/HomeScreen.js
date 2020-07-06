@@ -3,24 +3,32 @@ import {View,Text,StyleSheet} from "react-native";
 import colors from "../constants/colors";
 import { Button } from 'react-native-elements';
 import {AppText} from "../constants/text";
+import MyProgress from "../components/ui/MyProgress";
+import {HeadingText} from "../components/ui/HeadingText";
+import TaskItem from "../components/ui/TaskItem";
 
 export default props=>{
 
     return(
-        <View style={style.container}>
-            <Text>Hello </Text>
+        <View style={styles.container}>
+            <MyProgress/>
 
-            <View style={style.newGoals}>
-                <Button  buttonStyle={style.newGoalsBtn} title={AppText.add_new_goal} onPress={()=>props.navigation.navigate("Add New Goal")} />
+
+            <TaskItem/>
+
+
+            <View style={styles.newGoals}>
+                <Button  buttonStyle={styles.newGoalsBtn} title={AppText.add_new_goal} onPress={()=>props.navigation.navigate("Add New Goal")} />
             </View>
         </View>
     )
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     container:{
       position:'relative',
       flex:1,
+      padding:5,
     },
 
     newGoals:{
@@ -35,6 +43,9 @@ const style = StyleSheet.create({
         paddingHorizontal:30,
         paddingVertical:15,
         backgroundColor:colors.primary
+    },
+    item:{
+        marginVertical:10,
     }
 });
 
