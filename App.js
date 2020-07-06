@@ -11,6 +11,9 @@ import NewGoal from "./Screens/NewGoal";
 import {AppLoading} from "expo";
 import {AppText} from "./constants/text";
 import {goalTable,stepsTable,tasksTable} from "./database/db";
+import HistoryScreen from "./Screens/HistoryScreen";
+import ProgressScreen from "./Screens/ProgressScreen";
+import GuideScreen from "./Screens/GuideScreen";
 
 
 const Stack = createStackNavigator();
@@ -89,15 +92,29 @@ export default function App() {
       <Stack.Navigator  >
           <Stack.Screen options={{...headerLeft(props),...headerRight(props),...headerTitleStyle}} name={AppText.home} component={FrontScreen}/>
           <Stack.Screen options={{...headerTitleStyle}}  name={AppText.add_new_goal} component={NewGoal}/>
+          <Stack.Screen options={{...headerRight(props),...headerTitleStyle}}  name={AppText.my_progress} component={ProgressScreen}/>
       </Stack.Navigator>
   )
+
+  const HistoryStack = props=>(
+      <Stack.Navigator>
+          <Stack.Screen options={{...headerLeft(props),...headerRight(props),...headerTitleStyle}} name={AppText.history} component={HistoryScreen}/>
+      </Stack.Navigator>
+  )
+
+  const GuideStack = props=>(
+        <Stack.Navigator>
+            <Stack.Screen options={{...headerLeft(props),...headerRight(props),...headerTitleStyle}} name={AppText.guide} component={GuideScreen}/>
+        </Stack.Navigator>
+    )
+
   return (
      <NavigationContainer>
 
          <Drawer.Navigator >
-             <Drawer.Screen  name={AppText.home} children={HomeStack}
-
-             />
+             <Drawer.Screen  name={AppText.home} children={HomeStack}/>
+             <Drawer.Screen  name={AppText.history} children={HistoryStack}/>
+             <Drawer.Screen  name={AppText.guide} children={GuideStack}/>
          </Drawer.Navigator>
      </NavigationContainer>
   );

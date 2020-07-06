@@ -25,5 +25,14 @@ export default {
      my_progress:'My Progress',
      open:'Open',
      tasks:'Tasks',
-     check_my_progress:'Check My Progress'
+     check_my_progress:'Check My Progress',
+     history:'History',
+     goals:'Goals',
+     steps:'Steps',
+     i_want_to_show_this_goal_progress_in_my_front_screen:'I Want to show this goal progress in my front screen',
+     guide:'Guide',
+     calculate_progress:'Calculate Progress',
+     goal:'Goal',
+     have_you_completed_this_task:'Have You Completed This Task?'
+
 }

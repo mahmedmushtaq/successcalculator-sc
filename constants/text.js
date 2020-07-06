@@ -1,1 +1,10 @@
-export {default as AppText} from "./languages/en";
+import en from "./languages/en";
+import guideText from "./languages/guidetext-en";
+
+export const AppText = {
+    ...en,
+    ...guideText
+}
+
+
+
