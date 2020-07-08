@@ -13,6 +13,9 @@ import {
 import GoalModel from "../database/Models/GoalModel";
 import StepModel from "../database/Models/StepModel";
 import TaskModel from "../database/Models/TaskModel";
+import {useDispatch} from "react-redux";
+import {loadGoal} from "../store/actions/homedataactions";
+import {getStorageData} from "../constants/others";
 
 
 
@@ -20,6 +23,7 @@ export default props=>{
    const [wants_to,set_wants_to] = React.useState('');
    const [steps,setSteps] = useState([]);
    const [done,setDone] = useState(false);
+   const dispatch = useDispatch();
    const stepObject = {
        id:0,
        heading:'',
@@ -76,7 +80,7 @@ export default props=>{
    const onChangeDate = (step,task,e,selectedDate)=>{
        task['set_end_time'] = true;
        task['showDate'] = false;
-       onChangeTaskValue(step,task,'date',selectedDate);
+       onChangeTaskValue(step,task,'date',new Date(selectedDate).toISOString());
    }
 
    const addNewGoal = async ()=>{
@@ -84,7 +88,7 @@ export default props=>{
 
           const newGoal = await GoalModel.setNewGoal(wants_to);
 
-         const promises =  steps.map(async step=> await StepModel.addSteps(step.heading,newGoal.id))
+         const promises =  steps.map(async step=> await StepModel.addSteps(step.heading,newGoal.insertId))
          const allStepsInsertData = await Promise.all(promises);
 
          const tasksArray = [];
@@ -93,7 +97,7 @@ export default props=>{
              const tasks = steps[i].tasks;
              return tasks.map(async (task,index)=>{
                  if(!task.set_end_time){
-                     task.date = "";
+                     task.date = '';
                  }
                  task.step_id = singleStepData.insertId;
                  task.goal_id = newGoal.insertId;
@@ -105,9 +109,14 @@ export default props=>{
          })
 
          const res =  await TaskModel.addTasks(tasksArray)
+         console.log("res is = ",res);
          set_wants_to('');
          setSteps([]);
+         const check = await getStorageData();
+         dispatch(loadGoal(check))
          setDone(true);
+
+
        }else{
           Alert.alert(AppText.error,AppText.heading_name_and_steps_are_required,[{text:AppText.ok}])
       }

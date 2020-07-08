@@ -26,7 +26,7 @@ export default props=>{
                 <Text style={styles.dot}>{i+1}</Text>
             </View>
             <View style={styles.stepView}>
-                <Input onChangeText={text=>onChangeStep(step,'heading',text)}  style={styles.stepInput} placeholder={AppText.step_heading}/>
+                <Input value={step.heading} onChangeText={text=>onChangeStep(step,'heading',text)}  style={styles.stepInput} placeholder={AppText.step_heading}/>
 
                 {
                     step.tasks.map((task,i)=>(
@@ -35,7 +35,7 @@ export default props=>{
                                 <Text style={styles.dot}>{i+1}</Text>
                             </View>
                             <View style={styles.item}>
-                                <Input onChangeText={text => onChangeTaskValue(step,task,'task_name',text)}  style={{...styles.stepInput}} placeholder={AppText.task}/>
+                                <Input value={task.task_name} onChangeText={text => onChangeTaskValue(step,task,'task_name',text)}  style={{...styles.stepInput}} placeholder={AppText.task}/>
                                 <Text style={{fontSize:10,}}>{AppText.when_you_will_complete_this_or_have_no_idea}</Text>
                                 <Input value={task.set_end_time ? task.date.toString() : ''} />
                                 <Button title={AppText.set_date}  buttonStyle={{backgroundColor:colors.primary,width:200,marginHorizontal:20,}} onPress={()=>{

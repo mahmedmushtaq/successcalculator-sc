@@ -30,8 +30,18 @@ export default props=>{
             text:AppText.daily_task
         },
 
+        {
+            id:5,
+            title:AppText.how_i_can_edit_and_delete_my_previous_goal,
+            text:AppText.edit_previous_goals
+        },
+        {
+            id:6,
+            title:AppText.how_i_can_edit_and_delete_my_tasks,
+            text:AppText.edit_previous_tasks
+        },
 
-        ]
+]
     return(
       <ScrollView>
           <View style={styles.root}>

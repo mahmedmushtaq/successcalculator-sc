@@ -38,24 +38,82 @@ class TaskModel{
         })
     }
 
-    static getAllTasks(){
 
-            const promise = new Promise((resolve, reject) => {
-                db.transaction(tx => {
-                    tx.executeSql(
-                        'SELECT * FROM tasks',
-                        [],
-                        (_, result) => {
-                            resolve(result);
-                        },
-                        (_, err) => {
-                            reject(err);
-                        }
-                    );
-                });
+
+    static taskQuery(sql,args=[]){
+        const promise = new Promise((resolve, reject) => {
+            db.transaction(tx => {
+                tx.executeSql(
+                    sql,
+                    args,
+                    (_, result) => {
+                        resolve(result);
+                    },
+                    (_, err) => {
+                        reject(err);
+                    }
+                );
             });
-            return promise;
-        };
+        });
+        return promise;
+    };
+
+
+    static getAllTasks(completed) {
+        return this.taskQuery('SELECT * FROM tasks WHERE completed="'+completed+'" ORDER BY -end_time ASC')
+    }
+
+    static getAllTasksByGoalId(id){
+         const passId = id || -1;
+          return this.taskQuery('SELECT * FROM tasks WHERE goal_id='+passId);
+    };
+
+    static getAllTasksByStepIdAndStatus(id,completed){
+
+        return this.taskQuery('SELECT * FROM tasks WHERE step_id='+id+' AND completed="'+completed+'"');
+    };
+
+    static getAllTasksByIdWithStatus(id,completed){
+        return this.taskQuery('SELECT * FROM tasks WHERE completed="'+completed+'" AND id='+id);
+    };
+
+    static deleteGoalTasks(goalId){
+        return this.taskQuery('DELETE FROM tasks WHERE goal_id='+goalId);
+    }
+
+    static updateAllTasksById(value,id){
+        return this.taskQuery('UPDATE tasks SET task_name=?, end_time=? WHERE id=?',[value.task_name,value.date,id]);
+    }
+
+    static insertNewRecord(value){
+        let query = "INSERT INTO tasks(task_name,completed,end_time,step_id,goal_id) VALUES";
+
+            query = query + "('"
+                + value.task_name
+                + "','"
+                + value.completed
+                + "','"
+                + value.date
+                + "','"
+                + value.step_id
+                + "','"
+                + value.goal_id
+                + "')";
+
+
+
+         return this.taskQuery(query);
+
+
+    }
+
+    static deleteTask(id){
+        return this.taskQuery("DELETE FROM tasks WHERE id="+id);
+    }
+
+    static deleteTaskByStepId(step_id){
+        return this.taskQuery("DELETE FROM tasks WHERE step_id="+step_id);
+    }
 
 
 }

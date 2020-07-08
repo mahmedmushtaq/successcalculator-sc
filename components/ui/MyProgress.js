@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useState} from "react";
 import {View,StyleSheet,Dimensions,TouchableOpacity} from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import colors from "../../constants/colors";
-import GoalModel from "../../database/Models/GoalModel";
 import {HeadingText} from "./HeadingText";
 import {AppText} from "../../constants/text";
 import {CustomText} from "./Text";
@@ -10,35 +9,28 @@ import { Slider } from 'react-native-elements';
 import Card from "./Card";
 import {Button} from "react-native-elements";
 import ProgressCalculator from "./ProgressCalculator";
+import { Foundation,Feather } from '@expo/vector-icons';
 
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
 export default props=>{
-    const [goal,setGoal] = useState({});
-    const [progressValue,setProgressValue] = useState(.2);
+
+    const {goal,completedTasks,tasks} = props;
+
+    const [progressValue,setProgressValue] = useState(completedTasks.length/tasks.length);
     const [isVisible,setVisible] = useState(false);
     const navigation = useNavigation();
-    const loadGoal = useCallback(async()=>{
-
-        const goalData = await GoalModel.selectParticularGoal({
-            onlyLastRecord:true,
-            completed:false,
-        }).catch(err=>{
-            console.log("err = ",err);
-        })
 
 
 
-        console.log("goal data is = ",goalData);
-        setGoal(goalData);
 
-    },[])
 
-    useEffect(()=>{
-        loadGoal();
-    },[loadGoal])
+
+
+
+
 
     const opacity = .2;
     const Touchable = TouchableOpacity;
@@ -53,11 +45,14 @@ export default props=>{
                     title={AppText.check_my_progress}
                     onPress={()=>setVisible(true)}
             />
-            <Touchable activeOpacity={.9} onPress={()=>navigation.navigate(AppText.my_progress)}>
+            <Touchable activeOpacity={.9} >
                 <Card style={styles.container}>
 
                         <HeadingText style={{color:'white'}}>{AppText.my_progress}</HeadingText>
-                        <CustomText style={styles.item}>Wants to</CustomText>
+                        <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                            <CustomText style={styles.item}>{goal.wants_to}</CustomText>
+                            <Feather name="edit-2" size={20} color="black" onPress={()=>navigation.navigate(AppText.goal_settings)} />
+                        </View>
                         <View style={{ flex: 1,marginVertical:5, alignItems: 'stretch', justifyContent: 'center' }}>
                             <Slider
                                 value={progressValue}
@@ -70,15 +65,22 @@ export default props=>{
                             />
 
                         </View>
-                        <CustomText style={styles.item}>progress: {progressValue * 100}%</CustomText>
+
+
+                        <CustomText style={styles.item}>{AppText.progress}: {progressValue * 100}%</CustomText>
+
+
+
 
 
 
 
                 </Card>
             </Touchable>
-
-            <HeadingText style={{...styles.item,...{color:'black'}}}>{AppText.tasks}</HeadingText>
+            <View style={{flexDirection:'row',justifyContent:'space-between',padding:10,}}>
+                 <HeadingText style={{...styles.item,...{color:'black'}}}>{AppText.tasks}</HeadingText>
+                 <Foundation name="refresh" size={24} color="black" onPress={props.refresh} />
+             </View>
         </View>
 
 

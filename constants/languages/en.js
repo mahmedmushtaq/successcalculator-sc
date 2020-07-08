@@ -33,6 +33,19 @@ export default {
      guide:'Guide',
      calculate_progress:'Calculate Progress',
      goal:'Goal',
-     have_you_completed_this_task:'Have You Completed This Task?'
+     have_you_completed_this_task:'Have You Completed This Task?',
+     progress:'Progress ',
+     no_task_is_found:'No Task Is Found',
+     please_add_new_goal:'Please Add New Goal',
+     settings:'Settings',
+     save:'Save',
+     progress_setting:'Progress Setting',
+     update_goal:'Update Goal',
+     successfully:'Successfully',
+     goal_settings:'Goal Settings',
+     edit:'Edit',
+     delete:'Delete',
+     edit_task_screen:'Edit Task Screen',
+
 
 }

@@ -2,6 +2,7 @@ import * as SQLite from 'expo-sqlite';
 
 const db  = SQLite.openDatabase("sc.db");
 
+
 const generateTable = (sqlQuery)=>new Promise((resolve,reject)=>{
     db.transaction(transaction => {
         transaction.executeSql(
@@ -18,7 +19,7 @@ const generateTable = (sqlQuery)=>new Promise((resolve,reject)=>{
 })
 
 export const goalTable = ()=>(
-    generateTable('CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY NOT NULL, wants_to VARCHAR(100) NOT NULL, completed BOOLEAN default FALSE,  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,ended DATETIME DEFAULT NULL);')
+    generateTable('CREATE TABLE IF NOT EXISTS goals (id INTEGER PRIMARY KEY NOT NULL, wants_to VARCHAR(100) NOT NULL, completed BOOLEAN default false,  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,ended DATETIME DEFAULT NULL,show_on_front_screen INTEGER DEFAULT 0);')
 )
 
 

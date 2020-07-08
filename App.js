@@ -14,6 +14,10 @@ import {goalTable,stepsTable,tasksTable} from "./database/db";
 import HistoryScreen from "./Screens/HistoryScreen";
 import ProgressScreen from "./Screens/ProgressScreen";
 import GuideScreen from "./Screens/GuideScreen";
+import {Provider} from "react-redux";
+import store from "./store/store";
+import EditGoal from "./Screens/EditGoal";
+import EditTaskScreen from "./Screens/EditTaskScreen";
 
 
 const Stack = createStackNavigator();
@@ -66,6 +70,7 @@ export default function App() {
     const headerRight =(props)=>( {
         headerRight:()=>(
             <FontAwesome name="plus" size={24}  color="white" onPress={()=>props.navigation.navigate(AppText.add_new_goal)}  />
+
         ),
         headerRightContainerStyle:{
             backgroundColor:colors.primary,
@@ -92,7 +97,8 @@ export default function App() {
       <Stack.Navigator  >
           <Stack.Screen options={{...headerLeft(props),...headerRight(props),...headerTitleStyle}} name={AppText.home} component={FrontScreen}/>
           <Stack.Screen options={{...headerTitleStyle}}  name={AppText.add_new_goal} component={NewGoal}/>
-          <Stack.Screen options={{...headerRight(props),...headerTitleStyle}}  name={AppText.my_progress} component={ProgressScreen}/>
+          <Stack.Screen options={{...headerTitleStyle}}  name={AppText.edit_task_screen} component={EditTaskScreen}/>
+
       </Stack.Navigator>
   )
 
@@ -107,16 +113,25 @@ export default function App() {
             <Stack.Screen options={{...headerLeft(props),...headerRight(props),...headerTitleStyle}} name={AppText.guide} component={GuideScreen}/>
         </Stack.Navigator>
     )
+   const progressTrack = props=>(
+        <Stack.Navigator>
+            <Stack.Screen options={{...headerLeft(props),...headerRight(props),...headerTitleStyle}}  name={AppText.goal_settings} component={ProgressScreen}/>
+            <Stack.Screen options={{...headerTitleStyle}}  name={AppText.update_goal} component={EditGoal}/>
+        </Stack.Navigator>
+   )
 
   return (
-     <NavigationContainer>
+    <Provider store={store}>
+        <NavigationContainer>
 
-         <Drawer.Navigator >
-             <Drawer.Screen  name={AppText.home} children={HomeStack}/>
-             <Drawer.Screen  name={AppText.history} children={HistoryStack}/>
-             <Drawer.Screen  name={AppText.guide} children={GuideStack}/>
-         </Drawer.Navigator>
-     </NavigationContainer>
+            <Drawer.Navigator >
+                <Drawer.Screen  name={AppText.home} children={HomeStack}/>
+                <Drawer.Screen  name={AppText.history} children={HistoryStack}/>
+                <Drawer.Screen  name={AppText.goal_settings} children={progressTrack}/>
+                <Drawer.Screen  name={AppText.guide} children={GuideStack}/>
+            </Drawer.Navigator>
+        </NavigationContainer>
+    </Provider>
   );
 }
 
