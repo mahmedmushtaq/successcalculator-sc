@@ -6,12 +6,14 @@ import {HeadingText} from "./HeadingText";
 import {AppText} from "../../constants/text";
 import { Entypo } from '@expo/vector-icons';
 import colors from "../../constants/colors";
+import {useSelector} from "react-redux";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get('window').height;
 
 export default props=>{
     const [checked,setChecked] = useState(false);
+
     return(
         <Overlay
             isVisible={props.isVisible}

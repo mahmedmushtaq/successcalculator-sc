@@ -8,7 +8,7 @@ import {Button, Overlay} from "react-native-elements";
 import {AppText} from "../../constants/text";
 import {useDispatch} from "react-redux";
 import {deleteParticularTask} from "../../store/actions/homedataactions";
-
+import { useNavigation } from '@react-navigation/native';
 const width = Dimensions.get("window").width;
 
 export default props=>{
@@ -18,6 +18,7 @@ export default props=>{
         "July", "Aug", "Sep", "Oct", "Nov", "Dec" ];
 
    const dispatch = useDispatch();
+   const navigation = useNavigation();
 
    const [visible,setVisible] = useState(false);
 
@@ -32,13 +33,18 @@ export default props=>{
 
 
     const editTask = async ()=>{
-
+        setVisible(false);
+          navigation.navigate(AppText.edit_task_screen,{
+              task,
+          })
     }
 
     const deleteTask = async ()=>{
         setVisible(false);
         await dispatch(deleteParticularTask(task.id));
     }
+
+
 
 
 

@@ -8,6 +8,7 @@ import StepModel from "../../database/Models/StepModel";
 export const ADD_TASKS = "ADD_TASKS";
 export const ADD_ALL_THREE = "ADD_ALL_THREE";
 export const REMOVE_TASK = "REMOVE_TASK";
+export const UPDATE_TASK = "UPDATE_TASK";
 
 
 const backgroundColors = [ '#34495e',
@@ -49,7 +50,8 @@ export const loadGoal = (check)=> async dispatch=>{
 
 const taskData = async (goalData,dispatch,type=ADD_ALL_THREE)=>{
 
-    const tasksload = await TaskModel.getAllTasksByGoalId(goalData.id);
+    const tasksload = await TaskModel.getAllTasksByStepIdAndStatus(goalData.id,false);
+
 
     let tasksArray = [];
     let completedTaskArray = [];
@@ -137,6 +139,14 @@ export const deleteParticularTask = id=>async dispatch=>{
         payload:id,
     })
 
+}
+
+export const updateTask = task=>async dispatch=>{
+    await TaskModel.updateAllTasksById(task,task.id);
+    dispatch({
+        type:UPDATE_TASK,
+        payload:task,
+    })
 }
 
 

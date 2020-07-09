@@ -68,9 +68,9 @@ class TaskModel{
           return this.taskQuery('SELECT * FROM tasks WHERE goal_id='+passId);
     };
 
-    static getAllTasksByStepIdAndStatus(id,completed){
+    static getAllTasksByStepIdAndStatus(goal_id,completed){
 
-        return this.taskQuery('SELECT * FROM tasks WHERE step_id='+id+' AND completed="'+completed+'"');
+        return this.taskQuery('SELECT * FROM tasks WHERE completed="'+completed+'" and goal_id='+goal_id+' ORDER BY -end_time ASC')
     };
 
     static getAllTasksByIdWithStatus(id,completed){

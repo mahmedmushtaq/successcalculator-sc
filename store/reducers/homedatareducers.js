@@ -1,4 +1,11 @@
-import {ADD_ALL_THREE, ADD_GOALS, ADD_TASKS, REMOVE_TASK, UPDATE_ALL_THREE} from "../actions/homedataactions";
+import {
+    ADD_ALL_THREE,
+    ADD_GOALS,
+    ADD_TASKS,
+    REMOVE_TASK,
+    UPDATE_ALL_THREE,
+    UPDATE_TASK
+} from "../actions/homedataactions";
 
 const initialState = {
     tasks:[],
@@ -31,6 +38,12 @@ export default (state=initialState,actions)=>{
             return{
                 ...state,
                 tasks: remainingTasks,
+            }
+        case UPDATE_TASK:
+            const updateTasks = state.tasks.filter(task=>task.id !== actions.payload.id);
+            return {
+                ...state,
+                tasks: [...updateTasks,actions.payload],
             }
 
         default:

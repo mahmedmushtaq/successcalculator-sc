@@ -127,7 +127,7 @@ export default props=> {
                 ))
             }
 
-            <Button title={AppText.save}/>
+
 
 
         </View>

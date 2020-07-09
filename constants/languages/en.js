@@ -46,6 +46,7 @@ export default {
      edit:'Edit',
      delete:'Delete',
      edit_task_screen:'Edit Task Screen',
+     update_task:'Update Task',
 
 
 }
