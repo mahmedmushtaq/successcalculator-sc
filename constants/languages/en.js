@@ -47,6 +47,9 @@ export default {
      delete:'Delete',
      edit_task_screen:'Edit Task Screen',
      update_task:'Update Task',
+     progress_calculator:'Progress Calculator',
+     refresh:'Refresh',
+     add_more_task:'Add More Task',
 
 
 }

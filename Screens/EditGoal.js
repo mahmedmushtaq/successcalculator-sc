@@ -14,7 +14,8 @@ import GoalModel from "../database/Models/GoalModel";
 import StepModel from "../database/Models/StepModel";
 import TaskModel from "../database/Models/TaskModel";
 import {useDispatch, useSelector} from "react-redux";
-import {loadUpdateData} from "../store/actions/updateactions";
+import {loadStepsWithTasks} from "../store/actions/updateactions";
+import {loadGoal} from "../store/actions/homedataactions";
 
 
 
@@ -42,7 +43,7 @@ export default props=>{
 
 
     const loadGoalData = useCallback(async ()=>{
-        await dispatch(loadUpdateData(specificGoal));
+        await dispatch(loadStepsWithTasks(specificGoal));
         },[dispatch]);
 
     useEffect(()=>{
@@ -150,10 +151,10 @@ export default props=>{
            })
 
 
+            await Promise.all(overallPromise);
 
-          const res =   await Promise.all(overallPromise);
-
-         setDone(true);
+          setDone(true);
+          dispatch(loadGoal());// to refresh the home page again
 
 
 

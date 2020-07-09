@@ -1,66 +1,98 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {View,ActivityIndicator,FlatList,StyleSheet} from "react-native";
+import {View,ActivityIndicator,Animated,FlatList,StyleSheet,Easing} from "react-native";
 import colors from "../constants/colors";
 import { Button } from 'react-native-elements';
 import {AppText} from "../constants/text";
 import MyProgress from "../components/ui/MyProgress";
 import TaskItem from "../components/ui/TaskItem";
-import {CustomText} from "../components/ui/Text";
-import AsyncStorage from "@react-native-community/async-storage";
+
 import {HeadingText} from "../components/ui/HeadingText";
 import {useDispatch, useSelector} from "react-redux";
 import {loadGoal} from "../store/actions/homedataactions";
-import {getStorageData} from "../constants/others";
+
+const refreshImg = require("../assets/custom_icons/refresh.svg");
 
 export default props=>{
 
     const {tasks,goal,completedTasks,loading} = useSelector(store=>store.tasks);
     const dispatch = useDispatch();
+     const {refresh,setRefresh} = props;
+
 
 
 
 
     const loadData = useCallback(async ()=>{
-         const check  = await getStorageData();
-
-         await dispatch(loadGoal(check))
-
-    },[dispatch])
+        await dispatch(loadGoal())
+        setRefresh(false);
+        },[refresh])
 
     useEffect(()=>{
        loadData();
-    },[loadData])
-
-    const refresh = async ()=> {
-       await loadData()
-    };
+       },[loadData])
 
 
-    if(loading){
+
+
+    if(loading || refresh){
        return <View style={[styles.container, styles.horizontal]}>
 
            <ActivityIndicator size="large" color={colors.primary} />
        </View>
     }
 
+
+
+
+
+
     return(
-        <View style={styles.container}>
+        <View style={styles.container}
+        >
+
+
+
 
             {
                !loading ? goal ? (
 
                     <View>
 
+
                         {
-                            tasks.length === 0 ? <CustomText style={{alignSelf:'center'}}>{AppText.no_task_is_found}</CustomText> : (  <FlatList keyExtractor={(item)=>item.id.toString()} data={tasks} renderItem={(item)=>{
-                           return  item.index === 0 ?  <View>
-                               <MyProgress completedTasks={completedTasks} tasks={tasks} goal={goal}  refresh={refresh}/>
-                                <TaskItem task={item.item}/>
-                               </View> :     <TaskItem task={item.item}/>
+                            tasks.length ===0 ? <View >
+                                <MyProgress completedTasks={completedTasks} tasks={tasks} goal={goal}/>
+                                <View style={styles.noTaskContainer}>
+                                    <HeadingText>{AppText.no_task_is_found}</HeadingText>
+                                </View>
+
+                               </View>:   <FlatList  keyExtractor={(item)=>item.id.toString()} data={tasks} renderItem={(item)=>{
+                                return item.index === 0 ?<View>
+                                        <MyProgress completedTasks={completedTasks} tasks={tasks} goal={goal}/>
+                                        <TaskItem task={item.item}/>
+                                    </View>
+                                    :     <TaskItem task={item.item}/>
+
 
                             }}/>
-                            )
+
                         }
+
+
+                        <Button containerStyle={styles.addMoreTaskBtn} buttonStyle={{color:colors.primary,}} title={AppText.add_more_task}
+                                onPress={()=>props.navigation.navigate(AppText.goal_settings)}
+                        />
+
+
+
+
+
+
+
+
+
+
+
 
                 </View>) : (
                     <HeadingText>{AppText.please_add_new_goal}</HeadingText>
@@ -112,7 +144,24 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-around",
         padding: 10
+    },
+    noTaskIsFoundTv:{
+        marginLeft:'auto',
+        marginRight:'auto',
+    },
+    noTaskContainer:{
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    addMoreTaskBtn:{
+        width:"40%",
+        marginLeft:'auto',
+        marginRight:'auto',
+        marginTop:10,
     }
+
 });
 
 

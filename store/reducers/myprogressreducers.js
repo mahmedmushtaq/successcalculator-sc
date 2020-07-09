@@ -1,4 +1,4 @@
-import {ADD_GOALS, DELETE_GOAL} from "../actions/myprogressactions";
+import {ADD_GOALS, DELETE_GOAL} from "../actions/goalsettings";
 
 const initialData = {
     goals:[],

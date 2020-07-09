@@ -3,6 +3,7 @@ import GoalModel from "../../database/Models/GoalModel";
 import TaskModel from "../../database/Models/TaskModel";
 import colors from "../../constants/colors";
 import StepModel from "../../database/Models/StepModel";
+import {getStorageData} from "../../constants/others";
 
 
 export const ADD_TASKS = "ADD_TASKS";
@@ -21,7 +22,9 @@ const backgroundColors = [ '#34495e',
 ];
 
 
-export const loadGoal = (check)=> async dispatch=>{
+export const loadGoal = ()=> async dispatch=>{
+
+    const check  = await getStorageData();
 
     let goalData = {};
 
@@ -139,6 +142,7 @@ export const deleteParticularTask = id=>async dispatch=>{
         payload:id,
     })
 
+
 }
 
 export const updateTask = task=>async dispatch=>{
@@ -147,6 +151,8 @@ export const updateTask = task=>async dispatch=>{
         type:UPDATE_TASK,
         payload:task,
     })
+
+
 }
 
 

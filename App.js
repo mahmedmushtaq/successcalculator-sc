@@ -1,23 +1,25 @@
 import React, {useState} from 'react';
-import { FontAwesome } from '@expo/vector-icons';
+import {useDispatch} from "react-redux";
 import {NavigationContainer} from "@react-navigation/native";
 import {createDrawerNavigator} from "@react-navigation/drawer";
 import {createStackNavigator} from "@react-navigation/stack";
 import FrontScreen from "./Screens/HomeScreen";
 import { Entypo } from '@expo/vector-icons';
-import colors from "./constants/colors";
+import { Foundation } from '@expo/vector-icons';
 import * as Fonts from "expo-font";
 import NewGoal from "./Screens/NewGoal";
 import {AppLoading} from "expo";
 import {AppText} from "./constants/text";
 import {goalTable,stepsTable,tasksTable} from "./database/db";
 import HistoryScreen from "./Screens/HistoryScreen";
-import ProgressScreen from "./Screens/ProgressScreen";
+import ProgressScreen from "./Screens/GoalSettings";
 import GuideScreen from "./Screens/GuideScreen";
 import {Provider} from "react-redux";
 import store from "./store/store";
 import EditGoal from "./Screens/EditGoal";
 import EditTaskScreen from "./Screens/EditTaskScreen";
+import {Image, StyleSheet} from "react-native";
+import {TouchableOpacity} from "react-native";
 
 
 const Stack = createStackNavigator();
@@ -45,9 +47,11 @@ const loadFonts = ()=>{
 
 
 
-export default function App() {
+export default function App(props) {
 
     const [isFontLoaded,setFontLoaded] = useState(false);
+    const [refresh,setRefresh]  = useState(false);
+
 
     if(!isFontLoaded)
         return <AppLoading startAsync={loadFonts} onFinish={()=>setFontLoaded(true)}/>
@@ -67,22 +71,15 @@ export default function App() {
         }
     })
 
+    const imageAsset = require("./assets/custom_icons/add.png");
+
     const headerRight =(props)=>( {
         headerRight:()=>(
-            <FontAwesome name="plus" size={24}  color="white" onPress={()=>props.navigation.navigate(AppText.add_new_goal)}  />
+            <TouchableOpacity activeOpacity={.2}>
+              <Image style={{...styles.headerRightStyle}} source={imageAsset}/>
+            </TouchableOpacity>
+            ),
 
-        ),
-        headerRightContainerStyle:{
-            backgroundColor:colors.primary,
-            width:45,
-            height:45,
-            right:20,
-            marginVertical:'auto',
-            justify:'center',
-            alignItems:'center',
-            resizeMode:'contains',
-            borderRadius:50,
-        }
 
     })
     const headerTitleStyle = {
@@ -95,7 +92,12 @@ export default function App() {
 
   const HomeStack = (props)=>(
       <Stack.Navigator  >
-          <Stack.Screen options={{...headerLeft(props),...headerRight(props),...headerTitleStyle}} name={AppText.home} component={FrontScreen}/>
+          <Stack.Screen options={{...headerLeft(props),headerRight:()=>(
+              <TouchableOpacity activeOpacity={.2} style={{flexDirection:'row',alignItems:'center'}}>
+                  <Foundation name="refresh" size={24} color="black" onPress={()=>{setRefresh(true)}} style={styles.headerRightStyle} />
+                  <Image style={styles.headerRightStyle} source={imageAsset}/>
+              </TouchableOpacity>
+              ),...headerTitleStyle}} name={AppText.home} children={(props)=><FrontScreen refresh={refresh} setRefresh={setRefresh} {...props}/>}/>
           <Stack.Screen options={{...headerTitleStyle}}  name={AppText.add_new_goal} component={NewGoal}/>
           <Stack.Screen options={{...headerTitleStyle}}  name={AppText.edit_task_screen} component={EditTaskScreen}/>
 
@@ -133,6 +135,18 @@ export default function App() {
         </NavigationContainer>
     </Provider>
   );
+
+
+
+
+
+
 }
+
+const styles = StyleSheet.create({
+    headerRightStyle:{
+        width: 30, height: 30,marginRight:10,
+    }
+})
 
 

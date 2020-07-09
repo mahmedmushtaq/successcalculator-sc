@@ -9,7 +9,7 @@ import { Slider } from 'react-native-elements';
 import Card from "./Card";
 import {Button} from "react-native-elements";
 import ProgressCalculator from "./ProgressCalculator";
-import { Foundation,Feather } from '@expo/vector-icons';
+import {Feather } from '@expo/vector-icons';
 
 
 const height = Dimensions.get("window").height;
@@ -18,8 +18,9 @@ const width = Dimensions.get("window").width;
 export default props=>{
 
     const {goal,completedTasks,tasks} = props;
+    console.log("completed tasks ",completedTasks," tasks = ",tasks);
 
-    const [progressValue,setProgressValue] = useState(completedTasks.length/tasks.length);
+    const [progressValue,setProgressValue] = useState( tasks.length > 0 ? completedTasks.length/tasks.length :0);
     const [isVisible,setVisible] = useState(false);
     const navigation = useNavigation();
 
@@ -45,7 +46,7 @@ export default props=>{
                     title={AppText.check_my_progress}
                     onPress={()=>setVisible(true)}
             />
-            <Touchable activeOpacity={.9} >
+
                 <Card style={styles.container}>
 
                         <HeadingText style={{color:'white'}}>{AppText.my_progress}</HeadingText>
@@ -76,10 +77,10 @@ export default props=>{
 
 
                 </Card>
-            </Touchable>
+
             <View style={{flexDirection:'row',justifyContent:'space-between',padding:10,}}>
                  <HeadingText style={{...styles.item,...{color:'black'}}}>{AppText.tasks}</HeadingText>
-                 <Foundation name="refresh" size={24} color="black" onPress={props.refresh} />
+
              </View>
         </View>
 

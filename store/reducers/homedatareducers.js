@@ -35,6 +35,7 @@ export default (state=initialState,actions)=>{
 
         case REMOVE_TASK:
             const remainingTasks = state.tasks.filter(task=>task.id !== actions.payload);
+
             return{
                 ...state,
                 tasks: remainingTasks,

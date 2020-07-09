@@ -69,8 +69,9 @@ class TaskModel{
     };
 
     static getAllTasksByStepIdAndStatus(goal_id,completed){
+        const id = goal_id || -1;
 
-        return this.taskQuery('SELECT * FROM tasks WHERE completed="'+completed+'" and goal_id='+goal_id+' ORDER BY -end_time ASC')
+        return this.taskQuery('SELECT * FROM tasks WHERE completed="'+completed+'" and goal_id='+id+' ORDER BY -end_time ASC')
     };
 
     static getAllTasksByIdWithStatus(id,completed){

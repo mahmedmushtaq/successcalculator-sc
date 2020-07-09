@@ -6,7 +6,7 @@ import {CheckBox, Button, Overlay} from "react-native-elements";
 import {AppText} from "../constants/text";
 import {useDispatch, useSelector} from "react-redux";
 import {storeData} from "../constants/others";
-import {loadAllGoals,deleteSpecificGoal} from "../store/actions/myprogressactions";
+import {loadAllGoals,deleteSpecificGoal} from "../store/actions/goalsettings";
 import colors from "../constants/colors";
 import { Foundation } from '@expo/vector-icons';
 import GoalModel from "../database/Models/GoalModel";

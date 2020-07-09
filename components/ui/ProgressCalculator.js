@@ -1,80 +1,89 @@
-import React, {useState} from "react";
-import {ScrollView,View,StyleSheet,Dimensions} from "react-native";
+import React, {useCallback, useEffect, useState} from "react";
+import {ScrollView, View, StyleSheet, Dimensions, FlatList} from "react-native";
 import {CustomText} from "./Text";
 import {Button, CheckBox, Overlay} from 'react-native-elements';
 import {HeadingText} from "./HeadingText";
 import {AppText} from "../../constants/text";
-import { Entypo } from '@expo/vector-icons';
+import {loadAllGoals} from "../../store/actions/goalsettings";
 import colors from "../../constants/colors";
-import {useSelector} from "react-redux";
+import {loadStepsWithTasks} from "../../store/actions/updateactions";
+import GoalModel from "../../database/Models/GoalModel";
+import TaskCheckBoxItem from "./TaskCheckBoxItem";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get('window').height;
 
 export default props=>{
     const [checked,setChecked] = useState(false);
+    const [goalsArray,setAllGoalsArray] = useState([]);
+
+    const loadAllTasks = useCallback(async ()=>{
+       const allGoals = await loadAllGoals(false)();
+       const goalsArrayPromise = allGoals.map(async goal=>{
+            const stepsArray = await loadStepsWithTasks(goal,false)();
+
+            return {
+                ...goal,
+                steps:stepsArray,
+            }
+       })
+
+        const goalsArrayLocal = await Promise.all(goalsArrayPromise);
+
+       setAllGoalsArray(goalsArrayLocal);
+
+    },[])
+
+    useEffect(()=>{
+        loadAllTasks();
+    },[loadAllTasks])
+
+
 
     return(
         <Overlay
             isVisible={props.isVisible}
-            overlayStyle={{width:width-15,height:"45%"}}
+            overlayStyle={{...styles.overlayStyle,  paddingBottom: goalsArray.length > 0 ? 70 : undefined}}
             onBackdropPress={()=>props.setVisible(false)}
         >
 
 
 
-                <View>
-                    <View style={[styles.header,{marginBottom:20,}]}>
-                        <HeadingText>{AppText.calculate_progress}</HeadingText>
-                        <Entypo name="cross" size={24} color="black" onPress={()=>props.setVisible(false)}/>
-                    </View>
-                    <View style={styles.body}>
-                        <View style={styles.bodyHeader}>
-                            <HeadingText style={{textAlign:'center',fontSize:15,}}>
-                                Goal Name -<CustomText style={{fontSize:9}}>{AppText.goal}</CustomText>
-                            </HeadingText>
+            <View >
 
-                            <HeadingText style={{textAlign:'center',fontSize:10,}}>
-                                Step Name -<CustomText style={{fontSize:9}}>{AppText.step}</CustomText>
-                            </HeadingText>
+                <HeadingText style={{color:'white'}}>{AppText.progress_calculator}</HeadingText>
 
-
-                            <HeadingText style={{marginTop:20,marginBottom:20,}}>
-                                {AppText.have_you_completed_this_task}
-                            </HeadingText>
-                        </View>
-
-                      <View>
-                          <CheckBox
-                              center
-                              title={AppText.i_want_to_show_this_goal_progress_in_my_front_screen}
-                              iconRight
-                              containerStyle={styles.checkboxStyle}
-                              checkedIcon='dot-circle-o'
-                              uncheckedIcon='circle-o'
-                              checkedColor='red'
-
-                              checked={checked}
-                              onPress={()=>setChecked(!checked)}
-                          />
-                          <CustomText style={{fontSize:10,color:colors.belize_hole,marginLeft:19,}}>date time</CustomText>
-
-                      </View>
+                <FlatList keyExtractor={(item => item.id.toString())} data={goalsArray} renderItem={({item})=>(
+                    <View style={styles.item} >
+                        <HeadingText style={{...styles.textStyle,fontSize:16,}}>
+                            {item.wants_to} <CustomText style={styles.smallHintText}>{AppText.goal}</CustomText>
+                        </HeadingText>
+                        <FlatList keyExtractor={(item=>item.id.toString())} data={item.steps} renderItem={({item})=>(
+                            <View>
+                                <CustomText style={{...styles.textStyle,fontSize:13,}}>
+                                    {item.heading} <CustomText style={styles.smallHintText}>{AppText.step}</CustomText>
+                                </CustomText>
 
 
-                        <View style={styles.bodyFooter}>
+                                <FlatList keyExtractor={(item1 => item1.id.toString())} data={item.tasks} renderItem={({item})=>(
+                                   <TaskCheckBoxItem item={item}/>
+                                )}/>
 
-                            <Button buttonStyle={{backgroundColor:colors.asphalt}} title={AppText.done}/>
-                        </View>
+                            </View>
+                        )}/>
 
 
 
                     </View>
-
-                </View>
-
+                )}/>
 
 
+
+
+                <Button buttonStyle={{backgroundColor:'white',marginTop:'auto',alignItems:'flex-end'}} titleStyle={{color:colors.asphalt}} title={AppText.done}/>
+
+
+            </View>
 
 
         </Overlay>
@@ -85,19 +94,22 @@ const styles = StyleSheet.create({
      item:{
          marginVertical:10,
      },
-    header:{
-         flexDirection:'row',
-         justifyContent:'space-between'
-    },
-    checkboxStyle:{
-        padding:5,backgroundColor:'transparent',color:'white',borderTopWidth:0,borderLeftWidth:0,borderRightWidth:0,
-    },
-    bodyFooter:{
-         marginTop:'auto',
 
+    overlayStyle:{
+        width:width/1.5,
+        height:"45%",
+        color:'white',
+
+        backgroundColor:colors.primary
     },
-    body:{
-       justifyContent: 'flex-end'
+    textStyle:{
+         paddingLeft:10,
+         fontSize:10,
+
+         color:'white',
+    },
+    smallHintText:{
+         fontSize:6,
     }
 });
 
