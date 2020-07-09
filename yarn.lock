@@ -4719,13 +4719,6 @@ react-native-safe-area-context@^3.0.7, react-native-safe-area-context@~3.0.7:
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.0.7.tgz#0f53de7a30d626d82936000f3f6db374ecc4b800"
   integrity sha512-dqhRTlIFe5+P1yxitj0C9XVUxLqOmjomeqzUSSY8sNOWVjtIhEY/fl4ZKYpAVnktd8dt3zl13XmJTmRmy3d0uA==
 
-react-native-scl-alert@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-scl-alert/-/react-native-scl-alert-1.2.1.tgz#564a93c1b1119ac43842ada2fb2ccfce7c2a1384"
-  integrity sha512-p0gJ0ynOmsd+9ZWZIOOIFcMIrONiaqziTnKW541L9A5rhvtu+eqMrXyk6X/WaI5m7CWA+2ST3Z5y3fhRLL6Oiw==
-  dependencies:
-    prop-types "^15.6.1"
-
 react-native-screens@^2.9.0:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.9.0.tgz#ead2843107ba00fee259aa377582e457c74f1f3b"

@@ -6,10 +6,9 @@ import {CustomText} from "../components/ui/Text";
 import {Input,Button} from "react-native-elements";
 import NewGoalInputs from "../components/ui/NewGoalInputs";
 import colors from "../constants/colors";
-import {
-    SCLAlert,
-    SCLAlertButton
-} from 'react-native-scl-alert'
+import SCLAlert from "../lib/scl-alert/components/SCLAlert";
+import SCLAlertButton from "../lib/scl-alert/components/SCLAlertButton";
+
 import GoalModel from "../database/Models/GoalModel";
 import StepModel from "../database/Models/StepModel";
 import TaskModel from "../database/Models/TaskModel";

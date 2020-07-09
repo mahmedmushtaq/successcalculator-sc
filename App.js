@@ -98,6 +98,7 @@ export default function App(props) {
                   <Image style={styles.headerRightStyle} source={imageAsset}/>
               </TouchableOpacity>
               ),...headerTitleStyle}} name={AppText.home} children={(props)=><FrontScreen refresh={refresh} setRefresh={setRefresh} {...props}/>}/>
+          <Stack.Screen options={{...headerTitleStyle}}  name={AppText.update_goal} component={EditGoal}/>
           <Stack.Screen options={{...headerTitleStyle}}  name={AppText.add_new_goal} component={NewGoal}/>
           <Stack.Screen options={{...headerTitleStyle}}  name={AppText.edit_task_screen} component={EditTaskScreen}/>
 

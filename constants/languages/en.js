@@ -36,7 +36,7 @@ export default {
      have_you_completed_this_task:'Have You Completed This Task?',
      progress:'Progress ',
      no_task_is_found:'No Task Is Found',
-     please_add_new_goal:'Please Add New Goal',
+     please_add_new_goal:'Please Add A New Goal',
      settings:'Settings',
      save:'Save',
      progress_setting:'Progress Setting',

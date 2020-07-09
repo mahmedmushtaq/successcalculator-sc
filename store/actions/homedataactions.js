@@ -33,11 +33,11 @@ export const loadGoal = ()=> async dispatch=>{
 
 
     if(!check) {
-        if(data.rows._array.length >= 1){
+        if(data.rows.length >= 1){
             goalData = data.rows._array[0];
         }
     }else{
-        if(data.rows._array.length >= 1){
+        if(data.rows.length >= 1){
            goalData = data.rows._array.find(singleData=>singleData.id === parseInt(check));
 
         }

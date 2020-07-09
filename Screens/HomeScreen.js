@@ -54,7 +54,7 @@ export default props=>{
 
 
             {
-               !loading ? goal ? (
+               !loading ? goal.id ? (
 
                     <View>
 
@@ -80,7 +80,7 @@ export default props=>{
 
 
                         <Button containerStyle={styles.addMoreTaskBtn} buttonStyle={{color:colors.primary,}} title={AppText.add_more_task}
-                                onPress={()=>props.navigation.navigate(AppText.goal_settings)}
+                                onPress={()=>props.navigation.navigate(AppText.update_goal,{specificGoal: goal})}
                         />
 
 
