@@ -18,3 +18,23 @@ export const storeData = async (value) => {
         // saving error
     }
 }
+
+export const setIntroSlider = async (value)=>{
+    try{
+        await AsyncStorage.setItem('set_intro',value);
+    }catch(e){
+
+    }
+}
+
+
+export const getIntro = async () => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('set_intro');
+
+        return jsonValue != null ? JSON.parse(JSON.stringify(jsonValue)) : null;
+
+    } catch(e) {
+        // error reading value
+    }
+}

@@ -1,6 +1,6 @@
 import React from "react";
 import {Button, Input} from "react-native-elements";
-import {StyleSheet, View} from "react-native";
+import {StyleSheet, View,ScrollView} from "react-native";
 import {CustomText as Text} from "./Text";
 import {AppText} from "../../constants/text";
 import colors from "../../constants/colors";
@@ -21,7 +21,7 @@ export default props=>{
     } = props;
 
     return(
-        <View style={styles.stepContainer}  >
+        <View style={styles.stepContainer} >
             <View>
                 <Text style={styles.dot}>{i+1}</Text>
             </View>

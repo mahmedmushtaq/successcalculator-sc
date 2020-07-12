@@ -1,7 +1,7 @@
 import {
     ADD_ALL_THREE,
     ADD_GOALS,
-    ADD_TASKS,
+    ADD_TASKS, REFRESH_LOADING,
     REMOVE_TASK,
     UPDATE_ALL_THREE,
     UPDATE_TASK
@@ -45,6 +45,11 @@ export default (state=initialState,actions)=>{
             return {
                 ...state,
                 tasks: [...updateTasks,actions.payload],
+            }
+        case REFRESH_LOADING:
+            return {
+                ...state,
+                loading: true,
             }
 
         default:

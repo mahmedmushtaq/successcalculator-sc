@@ -3,10 +3,28 @@ import {StyleSheet, View} from "react-native";
 import {CheckBox} from "react-native-elements";
 import colors from "../../constants/colors";
 import {CustomText} from "./Text";
+import TaskModel from "../../database/Models/TaskModel";
+import moment from "moment";
+import {AppText} from "../../constants/text";
 
 
 export default props=>{
-    const {item} = props;
+    const {item,goalData,stepData,refreshTasks} = props;
+
+    const taskCompleted = async ()=>{
+        await TaskModel.taskCompleted(goalData,stepData,item.id);
+       await refreshTasks();
+    }
+
+    let dayDate = '';
+    let monthDate = '';
+    if(item.end_time) {
+        dayDate = new moment(new Date(item.end_time)).format("DD");
+        monthDate = new moment(new Date(item.end_time)).format("MMM");
+
+    }
+
+
     return(
         <View>
             <CheckBox
@@ -20,11 +38,11 @@ export default props=>{
                 checkedIcon='dot-circle-o'
                 uncheckedIcon='circle-o'
                 checked={item.completed === 'false'}
-                onPress={()=>{}}
+                onPress={taskCompleted}
                 checkedColor='white'
 
             />
-            <CustomText style={styles.textStyle}>Date time</CustomText>
+            <CustomText style={styles.textStyle}>{item.end_time ? monthDate+"/"+dayDate : AppText.no_end +" "+ AppText.time}</CustomText>
         </View>
     )
 }

@@ -1,19 +1,19 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {View, StyleSheet, ScrollView, KeyboardAvoidingView, Alert} from "react-native";
-import {HeadingText} from "../components/ui/HeadingText";
-import {AppText} from "../constants/text";
-import {CustomText} from "../components/ui/Text";
+import {HeadingText} from "../../components/ui/HeadingText";
+import {AppText} from "../../constants/text";
+import {CustomText} from "../../components/ui/Text";
 import {Input,Button} from "react-native-elements";
-import NewGoalInputs from "../components/ui/NewGoalInputs";
-import colors from "../constants/colors";
-import SCLAlert from "../lib/scl-alert/components/SCLAlert";
-import SCLAlertButton from "../lib/scl-alert/components/SCLAlertButton";
-import GoalModel from "../database/Models/GoalModel";
-import StepModel from "../database/Models/StepModel";
-import TaskModel from "../database/Models/TaskModel";
+import NewGoalInputs from "../../components/ui/NewGoalInputs";
+import colors from "../../constants/colors";
+import SCLAlert from "../../lib/scl-alert/components/SCLAlert";
+import SCLAlertButton from "../../lib/scl-alert/components/SCLAlertButton";
+import GoalModel from "../../database/Models/GoalModel";
+import StepModel from "../../database/Models/StepModel";
+import TaskModel from "../../database/Models/TaskModel";
 import {useDispatch, useSelector} from "react-redux";
-import {loadStepsWithTasks} from "../store/actions/updateactions";
-import {loadGoal} from "../store/actions/homedataactions";
+import {loadStepsWithTasks} from "../../store/actions/updateactions";
+import {loadGoal} from "../../store/actions/homedataactions";
 
 
 
@@ -115,13 +115,13 @@ export default props=>{
     const updateGoalFun = async ()=>{
         if(steps.length > 0 && wants_to !== "") {
 
-            await GoalModel.updateWantsTo(wants_to,specificGoal.id);
+            await GoalModel.updateWantsTo(wants_to,specificGoal.id,steps.length);
            const stepsPromises = steps.map(async step=>{
                if(step.fromDb)
-                   return await StepModel.updateStepHeadingById(step.heading,step.id)
+                   return await StepModel.updateStepHeadingById(step.heading,step.id,step.tasks.length)
                else
                {
-                   return await StepModel.addSteps(step.heading,specificGoal.id);
+                   return await StepModel.addSteps(step.heading,specificGoal.id,step.tasks.length);
                }
            });
             await Promise.all(stepsPromises);
@@ -165,7 +165,7 @@ export default props=>{
 
 
     return(
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps={"always"}>
 
             <View style={styles.container}>
 

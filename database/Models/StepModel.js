@@ -1,8 +1,9 @@
 import db from "../db";
+import moment from "moment";
 
 class StepModel{
-    static addSteps(heading,goal_id){
-        return this.stepQuery("INSERT INTO steps(heading,goal_id) VALUES (?,?)",[heading,goal_id])
+    static addSteps(heading,goal_id,total_tasks){
+        return this.stepQuery("INSERT INTO steps(heading,goal_id,total_tasks) VALUES (?,?,?)",[heading,goal_id,total_tasks])
 
     }
 
@@ -29,16 +30,29 @@ class StepModel{
 
     static getStepsByGoalIdWithStatus(goalId){
 
-        return this.stepQuery("SELECT * FROM steps WHERE goal_id="+goalId)
+        return this.stepQuery("SELECT * FROM steps WHERE goal_id="+goalId+" AND ended IS NULL")
     }
 
-    static updateStepHeadingById(heading,goalId){
-        return this.stepQuery('UPDATE steps SET heading="'+heading+'" WHERE goal_id='+goalId);
+    static updateStepHeadingById(heading,stepId,total_tasks){
+        return this.stepQuery('UPDATE steps SET heading="'+heading+'",total_tasks='+total_tasks+' WHERE id='+stepId);
     }
 
 
     static deleteStep(id){
         return this.stepQuery('DELETE FROM steps WHERE id='+id);
+    }
+
+    static stepComplete(stepId){
+
+        return this.stepQuery("UPDATE steps SET ended=DATETIME('now','localtime'),total_tasks=0 WHERE id="+stepId);
+    }
+
+    static decreaseTasksInSteps(total_tasks,stepId){
+        return this.stepQuery("UPDATE steps SET total_tasks="+total_tasks+" WHERE id="+stepId);
+    }
+
+    static getAllCompletedSteps(){
+        return this.stepQuery("SELECT * FROM steps WHERE ended IS NOT NULL");
     }
 
 

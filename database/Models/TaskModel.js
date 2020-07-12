@@ -1,4 +1,7 @@
 import db from "../db";
+import StepModel from "./StepModel";
+import GoalModel from "./GoalModel";
+import moment from "moment";
 
 class TaskModel{
     static addTasks(tasks){
@@ -65,13 +68,19 @@ class TaskModel{
 
     static getAllTasksByGoalId(id){
          const passId = id || -1;
-          return this.taskQuery('SELECT * FROM tasks WHERE goal_id='+passId);
+          return this.taskQuery('SELECT * FROM tasks WHERE goal_id='+passId+" ORDER BY -end_time ASC");
     };
 
-    static getAllTasksByStepIdAndStatus(goal_id,completed){
+    static getAllTasksByGoalIdAndStatus(goal_id,completed){
         const id = goal_id || -1;
 
         return this.taskQuery('SELECT * FROM tasks WHERE completed="'+completed+'" and goal_id='+id+' ORDER BY -end_time ASC')
+    };
+
+    static getAllTasksByStepIdAndStatus(stepId,completed){
+
+
+        return this.taskQuery('SELECT * FROM tasks WHERE completed="'+completed+'" and step_id='+stepId+' ORDER BY -end_time ASC')
     };
 
     static getAllTasksByIdWithStatus(id,completed){
@@ -79,6 +88,7 @@ class TaskModel{
     };
 
     static deleteGoalTasks(goalId){
+      //  const stepData = await StepModel.getStepsByGoalIdWithStatus()
         return this.taskQuery('DELETE FROM tasks WHERE goal_id='+goalId);
     }
 
@@ -114,6 +124,25 @@ class TaskModel{
 
     static deleteTaskByStepId(step_id){
         return this.taskQuery("DELETE FROM tasks WHERE step_id="+step_id);
+    }
+
+    static async taskCompleted(goal_data,step_data,task_id){
+        const totalTasksInSteps = step_data.tasks.length;
+        if(totalTasksInSteps-1 === 0){
+            // step is completed
+            await StepModel.stepComplete(step_data.id);
+            const totalSteps = goal_data.steps.length-1;
+            await GoalModel.updateTotalStepsOrIsGoalCompleted(totalSteps,goal_data.id);
+
+        }else{
+            await StepModel.decreaseTasksInSteps(step_data.tasks.length-1,step_data.id);
+        }
+
+
+
+        return this.taskQuery("UPDATE tasks SET completed='yes',ended=DATETIME('now','localtime') WHERE id="+task_id)
+
+
     }
 
 

@@ -1,20 +1,22 @@
 import React, {useState} from "react";
-import {View, StyleSheet, ScrollView, KeyboardAvoidingView, Alert} from "react-native";
-import {HeadingText} from "../components/ui/HeadingText";
-import {AppText} from "../constants/text";
-import {CustomText} from "../components/ui/Text";
+import {View, StyleSheet, ScrollView, Alert} from "react-native";
+import {HeadingText} from "../../components/ui/HeadingText";
+import {AppText} from "../../constants/text";
+import {CustomText} from "../../components/ui/Text";
 import {Input,Button} from "react-native-elements";
-import NewGoalInputs from "../components/ui/NewGoalInputs";
-import colors from "../constants/colors";
-import SCLAlert from "../lib/scl-alert/components/SCLAlert";
-import SCLAlertButton from "../lib/scl-alert/components/SCLAlertButton";
+import NewGoalInputs from "../../components/ui/NewGoalInputs";
+import colors from "../../constants/colors";
+import SCLAlert from "../../lib/scl-alert/components/SCLAlert";
+import SCLAlertButton from "../../lib/scl-alert/components/SCLAlertButton";
 
-import GoalModel from "../database/Models/GoalModel";
-import StepModel from "../database/Models/StepModel";
-import TaskModel from "../database/Models/TaskModel";
+import GoalModel from "../../database/Models/GoalModel";
+import StepModel from "../../database/Models/StepModel";
+import TaskModel from "../../database/Models/TaskModel";
 import {useDispatch} from "react-redux";
-import {loadGoal} from "../store/actions/homedataactions";
-import {getStorageData} from "../constants/others";
+import {loadGoal} from "../../store/actions/homedataactions";
+import {getStorageData} from "../../constants/others";
+import ScrollContentViewNativeComponent
+    from "react-native/Libraries/Components/ScrollView/ScrollContentViewNativeComponent";
 
 
 
@@ -85,9 +87,9 @@ export default props=>{
    const addNewGoal = async ()=>{
      if(steps.length > 0 && wants_to !== "") {
 
-          const newGoal = await GoalModel.setNewGoal(wants_to);
+          const newGoal = await GoalModel.setNewGoal(wants_to,steps.length);
 
-         const promises =  steps.map(async step=> await StepModel.addSteps(step.heading,newGoal.insertId))
+         const promises =  steps.map(async step=> await StepModel.addSteps(step.heading,newGoal.insertId,step.tasks.length))
          const allStepsInsertData = await Promise.all(promises);
 
          const tasksArray = [];
@@ -108,7 +110,7 @@ export default props=>{
          })
 
          const res =  await TaskModel.addTasks(tasksArray)
-         console.log("res is = ",res);
+
          set_wants_to('');
          setSteps([]);
          const check = await getStorageData();
@@ -126,7 +128,7 @@ export default props=>{
 
 
     return(
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps={"always"}>
 
                <View style={styles.container}>
 

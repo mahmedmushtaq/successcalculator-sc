@@ -69,7 +69,7 @@ export default props=>{
           <TouchableOpacity activeOpacity={.9} onLongPress={()=>setVisible(true)}>
               <View style={styles.date_txt_holder}>
                   <View style={{...styles.textHolder,...{backgroundColor:task.selectedColor,}}}>
-                      <HeadingText style={{fontSize:8,color:'white'}}>{task.end_time ? monthDate : 'No End'}</HeadingText>
+                      <HeadingText style={{fontSize:8,color:'white'}}>{task.end_time ? monthDate : AppText.no_end}</HeadingText>
                       <CustomText style={{color:'white'}}>{task.end_time ? dayDate: 'time'}</CustomText>
                   </View>
                   <View style={[styles.taskHolder,{backgroundColor:task.selectedColor}]}>

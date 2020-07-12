@@ -6,6 +6,7 @@ import StepModel from "../../database/Models/StepModel";
 import {getStorageData} from "../../constants/others";
 
 
+export const REFRESH_LOADING="REFRESH_LOADING";
 export const ADD_TASKS = "ADD_TASKS";
 export const ADD_ALL_THREE = "ADD_ALL_THREE";
 export const REMOVE_TASK = "REMOVE_TASK";
@@ -23,6 +24,7 @@ const backgroundColors = [ '#34495e',
 
 
 export const loadGoal = ()=> async dispatch=>{
+
 
     const check  = await getStorageData();
 
@@ -53,7 +55,7 @@ export const loadGoal = ()=> async dispatch=>{
 
 const taskData = async (goalData,dispatch,type=ADD_ALL_THREE)=>{
 
-    const tasksload = await TaskModel.getAllTasksByStepIdAndStatus(goalData.id,false);
+    const tasksload = await TaskModel.getAllTasksByGoalId(goalData.id);
 
 
     let tasksArray = [];
@@ -153,6 +155,12 @@ export const updateTask = task=>async dispatch=>{
     })
 
 
+}
+
+export const refreshLoading = ()=>async dispatch=>{
+    dispatch({
+        type:REFRESH_LOADING
+    })
 }
 
 

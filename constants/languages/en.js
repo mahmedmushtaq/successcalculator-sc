@@ -50,6 +50,13 @@ export default {
      progress_calculator:'Progress Calculator',
      refresh:'Refresh',
      add_more_task:'Add More Task',
-
+     no_end:'No end',
+     time:'time',
+     preach_write_act_slide_1:'Preach! Write! Act! Do any thing, what you want',
+     we_motivate_you_to_start_something_big:'We motivate you to start something big',
+     we_help_you_during_your_journey:'we help you during your journey',
+     we_build_your_imagination_how_to_think_good:'We will build your imagination how to think good',
+     keep_running_description:'If you can\'t fly then run.\nIf you can\'t run then walk.\nIf you can\'t work then crawl.\nBut by all means keep moving',
+     believe_it_can_be_done_description:'Believe it can be done. When you believe something can be done, really believe, your mind will find the ways to do it. Believing a solution paves the way to solution.'
 
 }

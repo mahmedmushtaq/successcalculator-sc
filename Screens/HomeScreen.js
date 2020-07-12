@@ -1,31 +1,49 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {View,ActivityIndicator,Animated,FlatList,StyleSheet,Easing} from "react-native";
+import {View, ActivityIndicator, FlatList, StyleSheet, Easing, Image, TouchableOpacity} from "react-native";
 import colors from "../constants/colors";
 import { Button } from 'react-native-elements';
 import {AppText} from "../constants/text";
-import MyProgress from "../components/ui/MyProgress";
-import TaskItem from "../components/ui/TaskItem";
+import {MyProgress} from "../components/ui/progress-components";
+import {TaskItem} from "../components/ui";
 
-import {HeadingText} from "../components/ui/HeadingText";
+import {HeadingText} from "../components/ui";
 import {useDispatch, useSelector} from "react-redux";
-import {loadGoal} from "../store/actions/homedataactions";
+import {loadGoal, refreshLoading} from "../store/actions/homedataactions";
+import {Foundation} from "@expo/vector-icons";
+import {imageAsset} from "../navigations/samenavigationprops";
+import {getIntro} from "../constants/others";
 
-const refreshImg = require("../assets/custom_icons/refresh.svg");
+
 
 export default props=>{
 
     const {tasks,goal,completedTasks,loading} = useSelector(store=>store.tasks);
     const dispatch = useDispatch();
-     const {refresh,setRefresh} = props;
 
 
 
 
+
+    React.useLayoutEffect(()=>{
+        props.navigation.setOptions({
+            headerRight: () => (
+               <View style={{flexDirection:'row'}}>
+                   <Foundation name="refresh" size={24} color="black" onPress={() => {
+                       dispatch(refreshLoading());
+                   }
+                   } style={styles.headerRightStyle}/>
+                 <TouchableOpacity activeOpacity={.5} onPress={()=>props.navigation.navigate(AppText.add_new_goal)}>
+                     <Image style={styles.headerRightStyle} source={imageAsset}/>
+                 </TouchableOpacity>
+
+               </View>
+            ),
+        });
+    },[props.navigation])
 
     const loadData = useCallback(async ()=>{
         await dispatch(loadGoal())
-        setRefresh(false);
-        },[refresh])
+    },[loading])
 
     useEffect(()=>{
        loadData();
@@ -34,7 +52,8 @@ export default props=>{
 
 
 
-    if(loading || refresh){
+
+    if(loading){
        return <View style={[styles.container, styles.horizontal]}>
 
            <ActivityIndicator size="large" color={colors.primary} />
@@ -46,11 +65,13 @@ export default props=>{
 
 
 
+
+
     return(
-        <View style={styles.container}
-        >
+        <View style={styles.container}>
 
 
+            <View style={{flex:1,}}>
 
 
             {
@@ -64,6 +85,9 @@ export default props=>{
                                 <MyProgress completedTasks={completedTasks} tasks={tasks} goal={goal}/>
                                 <View style={styles.noTaskContainer}>
                                     <HeadingText>{AppText.no_task_is_found}</HeadingText>
+                                    <Button containerStyle={styles.addMoreTaskBtn} buttonStyle={{color:colors.primary,}} title={AppText.add_more_task}
+                                            onPress={()=>props.navigation.navigate(AppText.update_goal,{specificGoal: goal})}
+                                    />
                                 </View>
 
                                </View>:   <FlatList  keyExtractor={(item)=>item.id.toString()} data={tasks} renderItem={(item)=>{
@@ -71,7 +95,15 @@ export default props=>{
                                         <MyProgress completedTasks={completedTasks} tasks={tasks} goal={goal}/>
                                         <TaskItem task={item.item}/>
                                     </View>
-                                    :     <TaskItem task={item.item}/>
+                                    :  item.index === tasks.length-1 ?
+                                    <View>
+                                        <TaskItem task={item.item}/>
+                                        <Button containerStyle={styles.addMoreTaskBtn} buttonStyle={{color:colors.primary,}} title={AppText.add_more_task}
+                                                onPress={()=>props.navigation.navigate(AppText.update_goal,{specificGoal: goal})}
+                                        />
+
+                                    </View>
+                                        : <TaskItem task={item.item}/>
 
 
                             }}/>
@@ -79,9 +111,6 @@ export default props=>{
                         }
 
 
-                        <Button containerStyle={styles.addMoreTaskBtn} buttonStyle={{color:colors.primary,}} title={AppText.add_more_task}
-                                onPress={()=>props.navigation.navigate(AppText.update_goal,{specificGoal: goal})}
-                        />
 
 
 
@@ -100,15 +129,17 @@ export default props=>{
             }
 
 
-
-
-
-
-
-
-            <View style={styles.newGoals}>
-                <Button  buttonStyle={styles.newGoalsBtn} title={AppText.add_new_goal} onPress={()=>props.navigation.navigate("Add New Goal")} />
             </View>
+            <View style={styles.newGoals}>
+                <Button  buttonStyle={styles.newGoalsBtn} title={AppText.add_new_goal} onPress={()=>props.navigation.navigate(AppText.add_new_goal)} />
+
+            </View>
+
+
+
+
+
+
         </View>
     )
 }
@@ -118,6 +149,7 @@ const styles = StyleSheet.create({
       position:'relative',
       flex:1,
       padding:5,
+
     },
 
     newGoals:{
@@ -160,6 +192,9 @@ const styles = StyleSheet.create({
         marginLeft:'auto',
         marginRight:'auto',
         marginTop:10,
+    },
+    headerRightStyle:{
+        width: 30, height: 30,marginRight:10,
     }
 
 });
